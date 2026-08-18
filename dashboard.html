@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard — GarrixCore</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="logo-mark">GarrixCore</a>
+  <button class="logout-btn" id="logoutBtn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+    Log out
+  </button>
+</nav>
+
+<main class="dashboard-main">
+  <div class="welcome-block">
+    <p class="welcome-eyebrow">[SYSTEM] Access granted</p>
+    <h1 id="welcomeHeading">Welcome back</h1>
+    <p>Your gaming universe is right where you left it.</p>
+  </div>
+
+  <div class="card-grid">
+    <div class="dash-card">
+      <div class="icon-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10"/><path d="M17 4v8a5 5 0 0 1-10 0V4"/><path d="M7 4H4a2 2 0 0 0 0 4h1"/><path d="M17 4h3a2 2 0 0 1 0 4h-1"/></svg>
+      </div>
+      <p class="stat-value" id="stat-total">0</p>
+      <p class="stat-label">Total games</p>
+    </div>
+
+    <div class="dash-card">
+      <div class="icon-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+      </div>
+      <p class="stat-value" id="stat-playing">0</p>
+      <p class="stat-label">Currently playing</p>
+    </div>
+
+    <div class="dash-card">
+      <div class="icon-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+      </div>
+      <p class="stat-value" id="stat-completed">0</p>
+      <p class="stat-label">Completed</p>
+    </div>
+  </div>
+
+  <div class="section-block">
+    <h2>Saved games</h2>
+    <p>Track what you're playing, what you've finished, and what's next.</p>
+
+    <div class="error-box" id="games-error"></div>
+
+    <form id="add-game-form" class="game-form" novalidate>
+      <input type="text" id="game-title" placeholder="Game title" required>
+      <select id="game-status">
+        <option value="playing">Playing</option>
+        <option value="backlog">Backlog</option>
+        <option value="completed">Completed</option>
+      </select>
+      <button type="submit" class="submit game-form-submit">Add</button>
+    </form>
+
+    <ul class="game-list" id="game-list">
+      <li class="game-list-empty" id="game-list-empty">No saved games yet — add your first one above.</li>
+    </ul>
+  </div>
+</main>
+
+<script src="dashboard.js"></script>
+</body>
+</html>

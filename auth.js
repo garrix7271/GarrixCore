@@ -1,10 +1,10 @@
 // auth.js — handles form submission for sign in, sign up, forgot password, and reset password.
-// Update these endpoint paths to match your actual backend routes.
+const API_BASE = "https://garrixcore.onrender.com";
 const ENDPOINTS = {
-  signin: "/api/login",
-  signup: "/api/signup",
-  forgot: "/api/forgot-password",
-  reset: "/api/reset-password",
+  signin: API_BASE + "/api/login",
+  signup: API_BASE + "/api/signup",
+  forgot: API_BASE + "/api/forgot-password",
+  reset: API_BASE + "/api/reset-password",
 };
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -39,7 +39,8 @@ async function handleSignIn(form) {
     errorId: "signin-error",
     onSuccess: (data) => {
       if (data.token) localStorage.setItem("authToken", data.token);
-      window.location.href = "/dashboard.html";
+      if (data.name) localStorage.setItem("userName", data.name);
+      window.location.href = "dashboard.html";
     },
   });
 }
@@ -70,7 +71,8 @@ async function handleSignUp(form) {
     errorId: "signup-error",
     onSuccess: (data) => {
       if (data.token) localStorage.setItem("authToken", data.token);
-      window.location.href = "/dashboard.html";
+      if (data.name) localStorage.setItem("userName", data.name);
+      window.location.href = "dashboard.html";
     },
   });
 }
