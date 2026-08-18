@@ -9,6 +9,7 @@ const {
   updateUser,
   findUserByResetToken,
 } = require('../utils/db');
+const { sendResetEmail } = require('../utils/email');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-only-secret-change-me';
 const RESET_TOKEN_TTL_MS = 60 * 60 * 1000; // 1 hour
@@ -95,11 +96,9 @@ async function forgotPassword(req, res) {
       const resetTokenExpires = Date.now() + RESET_TOKEN_TTL_MS;
       updateUser(email, { resetToken, resetTokenExpires });
 
-      // TODO: send a real email here using a provider like Resend, SendGrid,
-      // or Nodemailer. For now, the reset link is logged to the server console
-      // so you can test the flow locally.
+      // Send the actual reset email via Resend.
       const resetLink = `${req.headers.origin || 'http://127.0.0.1:5500'}/reset-password.html?token=${resetToken}`;
-      console.log('\n[DEV] Password reset link for', email, '\n', resetLink, '\n');
+      await sendResetEmail(email, resetLink);
     }
 
     return res.status(200).json({
