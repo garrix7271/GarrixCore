@@ -10,6 +10,7 @@ const FROM_EMAIL = process.env.FROM_EMAIL || 'onboarding@resend.dev';
 async function sendResetEmail(to, resetLink) {
   if (!RESEND_API_KEY) {
     console.log('\n[DEV] RESEND_API_KEY not set — reset link for', to, '\n', resetLink, '\n');
+    console.log('[DEV] Add RESEND_API_KEY and FROM_EMAIL to backend/.env to send email for real.');
     return { sent: false, reason: 'no_api_key' };
   }
 

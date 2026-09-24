@@ -10,6 +10,24 @@ const {
 
 const VALID_STATUSES = ['playing', 'completed', 'backlog'];
 
+function normalizeHours(value) {
+  if (value === undefined || value === null || value === '') return 0;
+  const numeric = Number(value);
+  if (!Number.isFinite(numeric)) {
+    throw new Error('Hours played must be a valid number.');
+  }
+  return Math.max(0, numeric);
+}
+
+function normalizeCompletion(value) {
+  if (value === undefined || value === null || value === '') return 0;
+  const numeric = Number(value);
+  if (!Number.isFinite(numeric)) {
+    throw new Error('Completion must be a valid number between 0 and 100.');
+  }
+  return Math.min(100, Math.max(0, numeric));
+}
+
 // GET /api/games
 function listGames(req, res) {
   const games = findGamesByUserId(req.userId);
@@ -18,29 +36,41 @@ function listGames(req, res) {
 
 // POST /api/games
 function addGame(req, res) {
-  const { title, status } = req.body;
+  const { title, status, platform, hoursPlayed, completion, notes } = req.body;
 
   if (!title || !title.trim()) {
     return res.status(400).json({ message: 'Game title is required.' });
   }
 
-  const finalStatus = VALID_STATUSES.includes(status) ? status : 'backlog';
+  try {
+    const finalStatus = VALID_STATUSES.includes(status) ? status : 'backlog';
+    const finalPlatform = platform ? String(platform).trim() : 'PC';
+    const finalHours = normalizeHours(hoursPlayed);
+    const finalCompletion = normalizeCompletion(completion);
+    const finalNotes = notes !== undefined && notes !== null ? String(notes).trim() : '';
 
-  const game = createGame({
-    id: crypto.randomUUID(),
-    userId: req.userId,
-    title: title.trim(),
-    status: finalStatus,
-    createdAt: new Date().toISOString(),
-  });
+    const game = createGame({
+      id: crypto.randomUUID(),
+      userId: req.userId,
+      title: title.trim(),
+      status: finalStatus,
+      platform: finalPlatform,
+      hoursPlayed: finalHours,
+      completion: finalCompletion,
+      notes: finalNotes,
+      createdAt: new Date().toISOString(),
+    });
 
-  return res.status(201).json({ game });
+    return res.status(201).json({ game });
+  } catch (error) {
+    return res.status(400).json({ message: error.message });
+  }
 }
 
 // PATCH /api/games/:id
 function editGame(req, res) {
   const { id } = req.params;
-  const { title, status } = req.body;
+  const { title, status, platform, hoursPlayed, completion, notes } = req.body;
 
   const updates = {};
   if (title !== undefined) {
@@ -54,6 +84,26 @@ function editGame(req, res) {
       return res.status(400).json({ message: 'Invalid status.' });
     }
     updates.status = status;
+  }
+  if (platform !== undefined) {
+    updates.platform = platform ? String(platform).trim() : 'PC';
+  }
+  if (hoursPlayed !== undefined) {
+    try {
+      updates.hoursPlayed = normalizeHours(hoursPlayed);
+    } catch (error) {
+      return res.status(400).json({ message: error.message });
+    }
+  }
+  if (completion !== undefined) {
+    try {
+      updates.completion = normalizeCompletion(completion);
+    } catch (error) {
+      return res.status(400).json({ message: error.message });
+    }
+  }
+  if (notes !== undefined) {
+    updates.notes = notes !== null ? String(notes).trim() : '';
   }
 
   const updated = updateGame(id, req.userId, updates);

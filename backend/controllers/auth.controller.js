@@ -96,8 +96,8 @@ async function forgotPassword(req, res) {
       const resetTokenExpires = Date.now() + RESET_TOKEN_TTL_MS;
       updateUser(email, { resetToken, resetTokenExpires });
 
-      // Send the actual reset email via Resend.
-      const resetLink = `${req.headers.origin || 'http://127.0.0.1:5500'}/reset-password.html?token=${resetToken}`;
+      const frontendBaseUrl = (process.env.FRONTEND_URL || req.headers.origin || 'http://127.0.0.1:5500').replace(/\/$/, '');
+      const resetLink = `${frontendBaseUrl}/reset-password.html?token=${resetToken}`;
       await sendResetEmail(email, resetLink);
     }
 

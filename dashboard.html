@@ -49,6 +49,90 @@
       <p class="stat-value" id="stat-completed">0</p>
       <p class="stat-label">Completed</p>
     </div>
+
+    <div class="dash-card dash-card-wide">
+      <div class="icon-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg>
+      </div>
+      <p class="stat-value" id="stat-hours">0h</p>
+      <p class="stat-label">Hours logged</p>
+    </div>
+  </div>
+
+  <div class="profile-layout">
+    <div class="profile-card">
+      <div class="profile-header-row">
+        <div class="profile-avatar" id="profileAvatar">GP</div>
+        <div class="profile-header-copy">
+          <p class="profile-label">Player profile</p>
+          <h3 id="profileName">Gamer</h3>
+        </div>
+        <div class="profile-header-actions">
+          <a href="profile.html" class="ghost-btn profile-link-btn">View profile</a>
+          <button type="button" class="ghost-btn" id="openProfileSettings">Edit profile</button>
+        </div>
+      </div>
+
+      <div class="profile-bio" id="profileBio">No bio yet — write a short description about your playstyle.</div>
+
+      <div class="profile-metrics">
+        <div class="profile-metric">
+          <span id="profilePlatform">PC</span>
+          <label>Favorite platform</label>
+        </div>
+        <div class="profile-metric">
+          <span id="profileAverage">0%</span>
+          <label>Avg. completion</label>
+        </div>
+        <div class="profile-metric">
+          <span id="profileStreak">0</span>
+          <label>Active streak</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="activity-card">
+      <div class="section-header-row">
+        <h2>Recent activity</h2>
+        <span>Live</span>
+      </div>
+      <ul id="activityList" class="activity-list"></ul>
+    </div>
+  </div>
+
+  <div class="badge-layout">
+    <div class="badge-card">
+      <div class="section-header-row compact">
+        <h2>Achievements</h2>
+      </div>
+      <ul id="achievementList" class="achievement-list"></ul>
+    </div>
+
+    <div class="badge-card">
+      <div class="section-header-row compact">
+        <h2>Milestones</h2>
+      </div>
+      <ul id="milestoneList" class="achievement-list milestone-list"></ul>
+    </div>
+  </div>
+
+  <div class="insight-panel" id="libraryInsights" aria-live="polite"></div>
+
+  <div class="community-layout">
+    <div class="community-card">
+      <div class="section-header-row compact">
+        <h2>Friends online</h2>
+        <span>Live</span>
+      </div>
+      <ul id="friendsList" class="friend-list"></ul>
+    </div>
+
+    <div class="community-card">
+      <div class="section-header-row compact">
+        <h2>Recommended for you</h2>
+      </div>
+      <ul id="recommendationsList" class="recommendation-list"></ul>
+    </div>
   </div>
 
   <div class="section-block">
@@ -64,14 +148,138 @@
         <option value="backlog">Backlog</option>
         <option value="completed">Completed</option>
       </select>
+      <select id="game-platform">
+        <option value="PC">PC</option>
+        <option value="PlayStation 5">PlayStation 5</option>
+        <option value="Xbox Series X|S">Xbox Series X|S</option>
+        <option value="Switch">Switch</option>
+        <option value="Mobile">Mobile</option>
+      </select>
+      <input type="number" id="game-hours" min="0" step="0.5" placeholder="Hours">
+      <input type="number" id="game-completion" min="0" max="100" step="1" placeholder="% done">
+      <textarea id="game-notes" rows="1" placeholder="Quick notes"></textarea>
       <button type="submit" class="submit game-form-submit">Add</button>
     </form>
+
+    <div class="library-toolbar">
+      <div class="toolbar-search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="search" id="game-search" placeholder="Search your library">
+      </div>
+      <div class="toolbar-actions">
+        <select id="game-filter" class="toolbar-filter">
+          <option value="all">All games</option>
+          <option value="playing">Playing</option>
+          <option value="backlog">Backlog</option>
+          <option value="completed">Completed</option>
+        </select>
+        <select id="game-sort" class="toolbar-filter">
+          <option value="recent">Recently added</option>
+          <option value="title">Title</option>
+          <option value="hours">Hours played</option>
+          <option value="progress">Progress</option>
+          <option value="status">Status</option>
+        </select>
+      </div>
+    </div>
 
     <ul class="game-list" id="game-list">
       <li class="game-list-empty" id="game-list-empty">No saved games yet — add your first one above.</li>
     </ul>
   </div>
 </main>
+
+<div class="modal-backdrop hidden" id="edit-modal" aria-hidden="true">
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="editModalTitle">
+    <div class="modal-header">
+      <h3 id="editModalTitle">Edit game</h3>
+      <button type="button" class="modal-close" id="closeEditModal" aria-label="Close edit window">×</button>
+    </div>
+
+    <form id="edit-game-form" class="modal-form">
+      <label>
+        <span>Title</span>
+        <input type="text" id="edit-game-title" required>
+      </label>
+
+      <div class="modal-row">
+        <label>
+          <span>Status</span>
+          <select id="edit-game-status">
+            <option value="playing">Playing</option>
+            <option value="backlog">Backlog</option>
+            <option value="completed">Completed</option>
+          </select>
+        </label>
+
+        <label>
+          <span>Platform</span>
+          <select id="edit-game-platform">
+            <option value="PC">PC</option>
+            <option value="PlayStation 5">PlayStation 5</option>
+            <option value="Xbox Series X|S">Xbox Series X|S</option>
+            <option value="Switch">Switch</option>
+            <option value="Mobile">Mobile</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="modal-row">
+        <label>
+          <span>Hours played</span>
+          <input type="number" id="edit-game-hours" min="0" step="0.5">
+        </label>
+
+        <label>
+          <span>Completion %</span>
+          <input type="number" id="edit-game-completion" min="0" max="100" step="1">
+        </label>
+      </div>
+
+      <label>
+        <span>Notes</span>
+        <textarea id="edit-game-notes" rows="4"></textarea>
+      </label>
+
+      <div class="modal-actions">
+        <button type="button" class="secondary-btn" id="cancelEditGame">Cancel</button>
+        <button type="submit" class="submit">Save changes</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="modal-backdrop hidden" id="profile-settings-modal" aria-hidden="true">
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="profileSettingsTitle">
+    <div class="modal-header">
+      <h3 id="profileSettingsTitle">Edit profile</h3>
+      <button type="button" class="modal-close" id="closeProfileSettings" aria-label="Close profile settings">×</button>
+    </div>
+
+    <form id="profile-settings-form" class="modal-form">
+      <label>
+        <span>Bio</span>
+        <textarea id="profile-bio-input" rows="4" placeholder="Tell other players about your style..."></textarea>
+      </label>
+
+      <label>
+        <span>Favorite platform</span>
+        <select id="profile-platform-input">
+          <option value="PC">PC</option>
+          <option value="PlayStation 5">PlayStation 5</option>
+          <option value="Xbox Series X|S">Xbox Series X|S</option>
+          <option value="Switch">Switch</option>
+          <option value="Mobile">Mobile</option>
+        </select>
+      </label>
+
+      <div class="modal-actions">
+        <button type="button" class="secondary-btn" id="cancelProfileSettings">Cancel</button>
+        <button type="submit" class="submit">Save profile</button>
+      </div>
+    </form>
+  </div>
+</div>
 
 <script src="dashboard.js"></script>
 </body>

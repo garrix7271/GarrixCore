@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile — GarrixCore</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="dashboard.css">
+  <link rel="stylesheet" href="profile.css">
+</head>
+<body>
+  <nav class="nav">
+    <a href="index.html" class="logo-mark">GarrixCore</a>
+    <div class="nav-actions">
+      <a href="dashboard.html" class="nav-link">Back to dashboard</a>
+      <button class="logout-btn" id="logoutBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+        Log out
+      </button>
+    </div>
+  </nav>
+
+  <main class="profile-page">
+    <section class="profile-hero panel">
+      <div class="profile-hero-main">
+        <div class="profile-avatar large" id="profileHeroAvatar">GP</div>
+        <div>
+          <p class="profile-label">Player card</p>
+          <h1 id="profileHeroName">Gamer</h1>
+          <p id="profileHeroBio" class="profile-hero-bio">No bio yet.</p>
+        </div>
+      </div>
+      <div class="profile-hero-meta">
+        <span id="profileHeroPlatform">PC</span>
+        <span>Favorite platform</span>
+      </div>
+    </section>
+
+    <section class="profile-stats-grid">
+      <div class="panel metric-panel">
+        <span class="metric-value" id="profileTotalGames">0</span>
+        <span class="metric-label">Games</span>
+      </div>
+      <div class="panel metric-panel">
+        <span class="metric-value" id="profileHoursLogged">0h</span>
+        <span class="metric-label">Hours logged</span>
+      </div>
+      <div class="panel metric-panel">
+        <span class="metric-value" id="profileCompletionAvg">0%</span>
+        <span class="metric-label">Avg completion</span>
+      </div>
+      <div class="panel metric-panel">
+        <span class="metric-value" id="profileCompletedCount">0</span>
+        <span class="metric-label">Completed</span>
+      </div>
+    </section>
+
+    <section class="profile-content">
+      <div class="profile-main-column">
+        <div class="panel">
+          <div class="section-header-row compact">
+            <h2>About</h2>
+          </div>
+          <p id="profileAboutText" class="profile-about-text">No profile details yet.</p>
+        </div>
+
+        <div class="panel">
+          <div class="section-header-row compact">
+            <h2>Edit profile</h2>
+          </div>
+          <form id="profileForm" class="profile-form">
+            <label>
+              <span>Display name</span>
+              <input type="text" id="profile-name-input" placeholder="Your gamer name">
+            </label>
+            <label>
+              <span>Favorite platform</span>
+              <select id="profile-platform-input">
+                <option value="PC">PC</option>
+                <option value="PlayStation 5">PlayStation 5</option>
+                <option value="Xbox Series X|S">Xbox Series X|S</option>
+                <option value="Switch">Switch</option>
+                <option value="Mobile">Mobile</option>
+              </select>
+            </label>
+            <label>
+              <span>Bio</span>
+              <textarea id="profile-bio-input" rows="5" placeholder="Tell players about your gaming style..."></textarea>
+            </label>
+            <button type="submit" class="submit">Save profile</button>
+          </form>
+        </div>
+      </div>
+
+      <aside class="profile-side-column">
+        <div class="panel">
+          <div class="section-header-row compact">
+            <h2>Recent games</h2>
+          </div>
+          <ul id="recentGamesList" class="recent-games-list"></ul>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <script src="profile.js"></script>
+</body>
+</html>
